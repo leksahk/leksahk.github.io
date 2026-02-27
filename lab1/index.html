@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html style="scroll-behavior: smooth;">
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
@@ -28,7 +29,7 @@
                         <h3>AI Challenge</h3>
                         <p><strong>Дедлайн:</strong> 22.03</p>
                         <p><strong>Тема:</strong> Штучний інтелект для екології</p>
-                        <button class="btn-more">Детальніше</button>
+                        <a href="details-ai.html" class="btn-more">Детальніше</a>
                     </div>
                 </article>
 
@@ -38,7 +39,7 @@
                         <h3>Cyber Hack</h3>
                         <p><strong>Дедлайн:</strong> 25.03</p>
                         <p><strong>Тема:</strong> Кібербезпека банківських систем</p>
-                        <button class="btn-more">Детальніше</button>
+                        <a href="details-cyber.html" class="btn-more">Детальніше</a>
                     </div>
                 </article>
 
@@ -48,27 +49,38 @@
                         <h3>Web Design Day</h3>
                         <p><strong>Дедлайн:</strong> 01.04</p>
                         <p><strong>Тема:</strong> Адаптивні інтерфейси майбутнього</p>
-                        <button class="btn-more">Детальніше</button>
+                        <a href="details-web.html" class="btn-more">Детальніше</a>
                     </div>
                 </article>
             </div>
         </section>
 
-        <section id="projects">
-            <h2>Мої проєкти</h2>
-            <div class="projects-list">
-                <article>
-                    <h3>EcoTracker App</h3>
-                    <p>Статус: <strong>В процесі</strong></p>
-                    <p>Опис: Додаток для відстеження вуглецевого сліду.</p>
-                </article>
-                <article>
-                    <h3>SecureGate</h3>
-                    <p>Статус: <strong>Завершено</strong></p>
-                    <p>Опис: Система подвійної аутентифікації.</p>
-                </article>
+       <section id="projects">
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px;">
+        <h2>Мої проєкти</h2>
+        <a href="create-project.html" class="btn-more">+ Створити заявку</a>
+    </div>
+
+    <div class="projects-list">
+        <article class="project-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3>EcoTracker App</h3>
+                <span style="cursor: pointer;" onclick="editProject('EcoTracker')">✏️</span>
             </div>
-        </section>
+            <p>Статус: <strong>В процесі</strong></p>
+            <p>Опис: Додаток для відстеження вуглецевого сліду.</p>
+        </article>
+
+        <article class="project-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3>SecureGate</h3>
+                <span style="cursor: pointer;">✏️</span>
+            </div>
+            <p>Статус: <strong>Завершено</strong></p>
+            <p>Опис: Система подвійної автентифікації.</p>
+        </article>
+    </div>
+</section>
 
         <section id="ranking">
             <h2>Рейтинг учасників</h2>
