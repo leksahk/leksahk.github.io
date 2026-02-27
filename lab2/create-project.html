@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Створити нову заявку</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Нова заявка на проєкт</h1>
+        <nav><a href="index.html" style="color: white; text-decoration: none;">← Скасувати</a></nav>
+    </header>
+
+    <main style="padding: 20px; max-width: 600px; margin: auto;">
+        <form class="project-form">
+            <div class="form-group">
+                <label for="p-name">Назва проєкту:</label>
+                <input type="text" id="p-name" name="project-name" placeholder="Введіть назву..." required>
+            </div>
+
+            <div class="form-group">
+                <label for="p-status">Статус:</label>
+                <select id="p-status" name="status">
+                    <option value="processing">В процесі</option>
+                    <option value="finished">Завершено</option>
+                    <option value="planned">Планується</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="p-desc">Опис проєкту:</label>
+                <textarea id="p-desc" name="description" rows="5" placeholder="Про що ваш проєкт?"></textarea>
+            </div>
+
+            <button type="submit" class="btn-more" style="width: 100%;">Надіслати заявку</button>
+        </form>
+    </main>
+</body>
+</html>
