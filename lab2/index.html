@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hackathon Arena</title>
+    <title>Віртуальні хакатони</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -22,11 +22,11 @@
         <section id="competitions">
             <h2>Активні змагання</h2>
             <div id="hackathon-timer">
-                До завершення хакатону: <span id="timer-countdown">Завантаження...</span>
+                <span id="timer-countdown">Завантаження дедлайну...</span>
             </div>
 
             <div class="grid-container">
-                <article class="card ai">
+                <article class="card ai" id="card-ai">
                     <div class="card-icon">AI</div>
                     <div class="card-content">
                         <h3>AI Challenge</h3>
@@ -36,7 +36,7 @@
                     </div>
                 </article>
 
-                <article class="card cyber">
+                <article class="card cyber" id="card-cyber">
                     <div class="card-icon">Cyber</div>
                     <div class="card-content">
                         <h3>Cyber Hack</h3>
@@ -46,7 +46,7 @@
                     </div>
                 </article>
 
-                <article class="card web">
+                <article class="card web" id="card-web">
                     <div class="card-icon">Web</div>
                     <div class="card-content">
                         <h3>Web Design Day</h3>
@@ -65,24 +65,25 @@
             </div>
 
             <div class="projects-list">
-    <article class="project-item">
-        <div style="display: flex; justify-content: space-between;">
-            <h3>EcoTracker App</h3>
-            <span style="cursor: pointer;" onclick="editProject(this)">✏️</span>
-        </div>
-        <p>Статус: <strong>В процесі</strong></p>
-        <p>Опис: <span class="project-desc">Додаток для відстеження вуглецевого сліду.</span></p>
-    </article>
+                <article class="project-item">
+                    <div style="display: flex; justify-content: space-between;">
+                        <h3>EcoTracker App</h3>
+                        <span style="cursor: pointer;" onclick="editProject(this)">✏️</span>
+                    </div>
+                    <p>Статус: <strong>В процесі</strong></p>
+                    <p>Опис: <span class="project-desc">Додаток для відстеження вуглецевого сліду.</span></p>
+                </article>
 
-    <article class="project-item">
-        <div style="display: flex; justify-content: space-between;">
-            <h3>SecureGate</h3>
-            <span style="cursor: pointer;" onclick="editProject(this)">✏️</span>
-        </div>
-        <p>Статус: <strong>Завершено</strong></p>
-        <p>Опис: <span class="project-desc">Система подвійної автентифікації.</span></p>
-    </article>
-        </div>
+                <article class="project-item">
+                    <div style="display: flex; justify-content: space-between;">
+                        <h3>SecureGate</h3>
+                        <span style="cursor: pointer;" onclick="editProject(this)">✏️</span>
+                    </div>
+                    <p>Статус: <strong>Завершено</strong></p>
+                    <p>Опис: <span class="project-desc">Система подвійної автентифікації.</span></p>
+                </article>
+            </div>
+        </section>
 
         <section id="ranking">
             <h2>Рейтинг учасників</h2>
@@ -104,6 +105,7 @@
     <footer>
         <address>
             <p>Контакти: <a href="mailto:oleksandra.savchuk.oi.2024@lpnu.ua">oleksandra.savchuk.oi.2024@lpnu.ua</a></p>
+            <p>Локація: м. Львів, Україна</p>
         </address>
         <p>&copy; 2026 Платформа Хакатонів</p>
     </footer>

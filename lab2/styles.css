@@ -27,7 +27,19 @@ nav ul li a {
     text-decoration: none;
 }
 
-/*сітка для карток*/
+#hackathon-timer {
+    background: linear-gradient(135deg, #8a2be2, #f5576c); 
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 50px; 
+    margin: 20px auto;
+    width: fit-content; 
+    box-shadow: 0 5px 15px rgba(245, 87, 108, 0.3);
+    transition: all 0.3s ease;
+}
+
 .grid-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -41,7 +53,7 @@ nav ul li a {
     overflow: hidden;
     box-shadow: 0 8px 15px rgba(0,0,0,0.1);
     text-align: center;
-    transition: transform 0.3s;
+    transition: transform 0.3s, opacity 0.5s, filter 0.5s;
     display: flex;
     flex-direction: column;
 }
@@ -50,7 +62,13 @@ nav ul li a {
     transform: translateY(-5px);
 }
 
-/*кольорові верхівки карток*/
+.card-inactive {
+    opacity: 0.5;
+    filter: grayscale(1);      
+    pointer-events: none;      
+    transform: scale(0.95);   
+}
+
 .card-icon {
     height: 100px;
     display: flex;
@@ -61,7 +79,6 @@ nav ul li a {
     color: white;
 }
 
-/*градієнти для різних типів*/
 .ai .card-icon { background: linear-gradient(135deg, #4b0082, #8a2be2); }
 .cyber .card-icon { background: linear-gradient(135deg, #0072ff, #00c6ff); }
 .web .card-icon { background: linear-gradient(135deg, #f093fb, #f5576c); }
@@ -88,7 +105,14 @@ nav ul li a {
     background-color: #fcd01c;
 }
 
-/*адаптивність */
+.btn-joined, .btn-more:disabled {
+    background-color: #28a745 !important; 
+    color: #ffffff !important;            
+    opacity: 1 !important;                
+    cursor: default !important;         
+    -webkit-text-fill-color: #ffffff;   
+}
+
 @media (max-width: 768px) {
     .grid-container { grid-template-columns: repeat(2, 1fr); }
 }
@@ -96,33 +120,6 @@ nav ul li a {
 @media (max-width: 480px) {
     .grid-container { grid-template-columns: 1fr; }
     nav ul li { display: block; margin: 10px 0; }
-}
-
-/*футер та пошта*/
-footer {
-    text-align: center;
-    padding: 30px;
-    background-color: #333;
-    color: white;
-}
-
-footer address a {
-    color: #00d4ff !important; 
-    text-decoration: underline;
-    font-weight: bold;
-}
-
-table {
-    width: 90%;
-    margin: 20px auto;
-    border-collapse: collapse;
-    background: white;
-}
-
-table th, table td {
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
-    text-align: left;
 }
 
 #projects article {
@@ -139,19 +136,25 @@ table th, table td {
     color: #333;
 }
 
-.details-image {
-    width: 100%;        
-    height: 300px;      
-    object-fit: cover;  
-    border-radius: 12px;
-    margin-bottom: 25px;
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background: white;
+}
+
+table th, table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
 }
 
 .project-form {
     background: white;
     padding: 30px;
     border-radius: 15px;
-    box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1); 
+}
 
 .form-group {
     margin-bottom: 20px;
@@ -179,20 +182,23 @@ table th, table td {
     border-color: #ffde59; 
 }
 
-#hackathon-timer {
-    background: linear-gradient(135deg, #8a2be2, #f5576c); 
-    color: white;
-    padding: 20px;
+footer {
     text-align: center;
-    font-weight: bold;
-    border-radius: 50px; 
-    margin: 20px auto;
-    width: fit-content; 
-    box-shadow: 0 5px 15px rgba(245, 87, 108, 0.3);
+    padding: 30px;
+    background-color: #333;
+    color: white;
 }
 
-.btn-joined {
-    background-color: #28a745 !important;
-    color: white !important;
-    cursor: default !important;
+footer address a {
+    color: #00d4ff !important; 
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.details-image {
+    width: 100%;        
+    height: 300px;      
+    object-fit: cover;  
+    border-radius: 12px;
+    margin-bottom: 25px;
 }

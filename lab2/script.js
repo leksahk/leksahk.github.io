@@ -4,77 +4,84 @@ const participants = [
     { nickname: 'CyberKnight', wins: 2, points: 850 }
 ];
 
-function renderRanking() {
-    const tableBody = document.getElementById('ranking-body');
-    tableBody.innerHTML = ''; 
+const hackathons = [
+    { id: 'card-ai', deadline: "March 03, 2026 23:59:59", name: "AI Challenge" },
+    { id: 'card-cyber', deadline: "March 04, 2026 12:11:00", name: "Cyber Hack" },
+    { id: 'card-web', deadline: "April 01, 2026 23:59:59", name: "Web Design Day" }
+];
 
-    participants.forEach((user, index) => {
-        const row = `<tr>
-            <td>${index + 1}</td>
-            <td>${user.nickname}</td>
-            <td>${user.wins}</td>
-            <td>${user.points}</td>
-        </tr>`;
-        tableBody.innerHTML += row;
+let currentActiveIndex = 0;
+
+function updateTimer() {
+    const timerDisplay = document.getElementById("timer-countdown");
+    const now = new Date().getTime();
+    
+    if (currentActiveIndex >= hackathons.length) {
+        timerDisplay.innerHTML = "УСІ ЗМАГАННЯ ЗАВЕРШЕНО";
+        return;
+    }
+
+    const current = hackathons[currentActiveIndex];
+    const distance = new Date(current.deadline).getTime() - now;
+
+    if (distance < 0) {
+        markAsInactive(current.id);
+        currentActiveIndex++;
+        updateTimer(); 
+        return;
+    }
+
+    const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+    timerDisplay.innerHTML = `До завершення ${current.name}: ${d}д ${h}г ${m}хв ${s}с`;
+}
+
+function markAsInactive(cardId) {
+    const card = document.getElementById(cardId);
+    if (card) {
+        card.classList.add('card-inactive');
+        const btn = card.querySelector('button');
+        btn.innerText = "Завершено";
+    }
+}
+
+function renderRanking() {
+    const body = document.getElementById('ranking-body');
+    body.innerHTML = '';
+    participants.forEach((p, i) => {
+        body.innerHTML += `<tr><td>${i+1}</td><td>${p.nickname}</td><td>${p.wins}</td><td>${p.points}</td></tr>`;
     });
 }
 
-function editProject(pencilIcon) {
-    const article = pencilIcon.closest('.project-item');
-    
-    const title = article.querySelector('h3');
-    const status = article.querySelector('strong');
-    const description = article.querySelector('.project-desc');
-
-    const newName = prompt("Змінити назву проєкту:", title.innerText);
-    if (newName !== null && newName.trim() !== "") {
-        title.innerText = newName; 
-    }
-
-    const newStatus = prompt("Змінити статус (напр., В процесі, Завершено):", status.innerText);
-    if (newStatus !== null && newStatus.trim() !== "") {
-        status.innerText = newStatus;
-    }
-
-    const newDesc = prompt("Змінити опис проєкту:", description.innerText);
-    if (newDesc !== null && newDesc.trim() !== "") {
-        description.innerText = newDesc; 
-    }
-}
-
-function joinHackathon(button) {
-    button.innerText = "Ви у списку";
-    button.classList.add('btn-joined');
-    button.disabled = true;
-
+function joinHackathon(btn) {
+    btn.innerText = "Ви у списку";
+    btn.style.backgroundColor = "#28a745";
+    btn.disabled = true;
     participants.push({ nickname: 'Ви (Учасник)', wins: 0, points: 100 });
     renderRanking();
 }
 
-//таймер зворотного відліку
-function initTimer() {
-    const deadline = new Date("March 22, 2026 23:59:59").getTime();
+function editProject(pencilIcon) {
+    const article = pencilIcon.closest('.project-item');
+    const title = article.querySelector('h3');
+    const status = article.querySelector('strong');
+    const description = article.querySelector('.project-desc');
 
-    const x = setInterval(function() {
-        const now = new Date().getTime();
-        const distance = deadline - now;
+    const newName = prompt("Назва проєкту:", title.innerText);
+    if (newName) title.innerText = newName;
 
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    const newStatus = prompt("Статус:", status.innerText);
+    if (newStatus) status.innerText = newStatus;
 
-        document.getElementById("timer-countdown").innerHTML = 
-            days + "д " + hours + "г " + minutes + "хв " + seconds + "с ";
-
-        if (distance < 0) {
-            clearInterval(x);
-            document.getElementById("timer-countdown").innerHTML = "ЧАС ВИЙШОВ";
-        }
-    }, 1000);
+    const newDesc = prompt("Опис:", description.innerText);
+    if (newDesc) description.innerText = newDesc;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     renderRanking();
-    initTimer();
+    setInterval(updateTimer, 1000);
+    updateTimer();
 });
