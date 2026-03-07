@@ -9,26 +9,17 @@ const ParticipantList = () => {
   ];
 
   return (
-    <div className="participants-page">
-      <h2>Список учасників</h2>
-      <table className="participants-table">
-        <thead>
-          <tr>
-            <th>Нікнейм</th>
-            <th>Роль</th>
-            <th>Команда</th>
-          </tr>
-        </thead>
-        <tbody>
-          {participants.map(p => (
-            <tr key={p.id}>
-              <td>{p.nickname}</td>
-              <td>{p.role}</td>
-              <td>{p.team}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="page-container">
+      <h2 className="page-title">Список учасників</h2>
+      <div className="participants-list">
+        {participants.map(p => (
+          <div key={p.id} className="participant-card">
+            <span className="nickname">{p.nickname}</span>
+            <span className="role">{p.role}</span>
+            <span className="team-name">{p.team}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

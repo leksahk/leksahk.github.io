@@ -1,5 +1,5 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: Arial, sans-serif !important;
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
@@ -52,10 +52,10 @@ nav ul li a {
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-    text-align: center;
-    transition: transform 0.3s, opacity 0.5s, filter 0.5s;
     display: flex;
     flex-direction: column;
+    text-align: center;
+    transition: transform 0.3s, opacity 0.5s, filter 0.5s; 
 }
 
 .card:hover {

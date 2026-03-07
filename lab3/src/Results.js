@@ -1,25 +1,21 @@
 import React from 'react';
 
 const Results = () => {
-  const scoreboard = [
-    { id: 1, team: "Alpha", points: 95, status: "Winner" },
-    { id: 2, team: "Beta", points: 88, status: "Runner-up" }
+  const scores = [
+    { id: 1, team: "Alpha", points: 1250, status: "Winner" },
+    { id: 2, team: "Beta", points: 1100, status: "Runner-up" }
   ];
 
   return (
-    <div className="results-container">
-      <h2>Турнірна таблиця</h2>
+    <div className="page-container">
+      <h2 className="page-title">Турнірна таблиця</h2>
       <div className="results-list">
-        {scoreboard.map(item => (
-          <div key={item.id} className="result-card">
-            <div className="place-badge">#{item.id}</div>
-            <div className="team-info">
-              <span className="team-name">{item.team}</span>
-              <span className="status-tag">{item.status}</span>
-            </div>
-            <div className="points-display">
-              <strong>{item.points}</strong> <span>балів</span>
-            </div>
+        {scores.map(s => (
+          <div key={s.id} className="result-card">
+            <span className="place">#{s.id}</span>
+            <span className="team">{s.team}</span>
+            <span className="score"><strong>{s.points}</strong> балів</span>
+            <span className="status">{s.status}</span>
           </div>
         ))}
       </div>
