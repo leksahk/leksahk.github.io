@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { HashRouter as Router, Routes, Route, NavLink, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
 
 import { initializeApp } from "firebase/app";
 import { 
   getAuth, 
-  signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword, 
   onAuthStateChanged, 
-  signOut 
+  signOut,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword 
 } from "firebase/auth";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { getFirestore, collection, onSnapshot } from "firebase/firestore"; 
 
 import Timer from './Timer';
 import HackathonCard from './HackathonCard';
@@ -33,32 +33,14 @@ const db = getFirestore(app);
 
 const AuthSection = ({ onAuth, email, setEmail, password, setPassword }) => {
   const [isRegister, setIsRegister] = useState(false);
-  
   return (
     <div className="auth-box">
       <h3>{isRegister ? "Реєстрація" : "Вхід"}</h3>
-      <input 
-        type="email" 
-        placeholder="Email" 
-        value={email} 
-        onChange={(e) => setEmail(e.target.value)} 
-      />
-      <input 
-        type="password" 
-        placeholder="Пароль" 
-        value={password} 
-        onChange={(e) => setPassword(e.target.value)}
-        autoComplete="new-password" 
-      />
+      <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+      <input type="password" placeholder="Пароль" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="new-password" />
       <div className="auth-buttons">
-        <button onClick={() => onAuth(isRegister ? 'reg' : 'login')}>
-          {isRegister ? "Зареєструватися" : "Увійти"}
-        </button>
-        <p onClick={() => {
-          setIsRegister(!isRegister);
-          setEmail('');    
-          setPassword(''); 
-          }} className="auth-toggle">
+        <button onClick={() => onAuth(isRegister ? 'reg' : 'login')}>{isRegister ? "Зареєструватися" : "Увійти"}</button>
+        <p onClick={() => { setIsRegister(!isRegister); setEmail(''); setPassword(''); }} className="auth-toggle">
           {isRegister ? "Вже є акаунт? Увійти" : "Немає акаунта? Створити"}
         </p>
       </div>
@@ -71,13 +53,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
-  const [competitions, setCompetitions] = useState([
-    { id: 'l3_1', name: "AI Challenge", category: "AI", theme: "Штучний інтелект для екології", deadline: "22.03", fullDate: "March 22, 2026 23:59:59" },
-    { id: 'l3_2', name: "Cyber Hack", category: "Cyber", theme: "Кібербезпека банківських систем", deadline: "25.03", fullDate: "March 25, 2026 23:59:59" },
-    { id: 'l3_3', name: "Web Design Day", category: "Web", theme: "Адаптивні інтерфейси майбутнього", deadline: "01.04", fullDate: "April 01, 2026 23:59:59" }
-  ]);
-
+  const [competitions, setCompetitions] = useState([]); 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -86,21 +62,25 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const fetchFromFirebase = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "hackathons"));
-        const fbData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        
-        setCompetitions(prev => {
-          const onlyNew = fbData.filter(newH => !prev.some(oldH => oldH.name === newH.name));
-          return [...prev, ...onlyNew];
-        });
-      } catch (error) {
-        console.error("Помилка завантаження бази:", error);
-      }
-    };
-    fetchFromFirebase();
+    const colRef = collection(db, "hackathons");
+    const unsubscribe = onSnapshot(colRef, (querySnapshot) => {
+      const fbData = querySnapshot.docs.map(doc => ({ 
+        id: doc.id, 
+        ...doc.data() 
+      }));
+      setCompetitions(fbData);
+    }, (error) => {
+      console.error("Firebase error:", error);
+    });
+    return () => unsubscribe();
   }, []);
+
+  const upcomingCompetition = competitions
+    .filter(h => h.fullDate) 
+    .find(h => {
+      const timeDiff = new Date(h.fullDate).getTime() - new Date().getTime();
+      return timeDiff > 0;
+    });
 
   const handleAuth = async (type) => {
     try {
@@ -113,19 +93,14 @@ function App() {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      setEmail('');   
-      setPassword(''); 
-    } catch (e) {
-      alert("Помилка при виході");
-    }
+      setEmail(''); setPassword(''); 
+    } catch (e) { alert("Помилка при виході"); }
   };
 
   const toggleFilter = (category) => {
-    if (activeFilters.includes(category)) {
-      setActiveFilters(activeFilters.filter(c => c !== category));
-    } else {
-      setActiveFilters([...activeFilters, category]);
-    }
+    setActiveFilters(prev => 
+      prev.includes(category) ? prev.filter(c => c !== category) : [...prev, category]
+    );
   };
 
   const filteredData = activeFilters.length === 0 
@@ -148,11 +123,7 @@ function App() {
         <main>
           <section className="user-auth-section">
             {!user ? (
-              <AuthSection 
-                onAuth={handleAuth} 
-                email={email} setEmail={setEmail} 
-                password={password} setPassword={setPassword} 
-              />
+              <AuthSection onAuth={handleAuth} email={email} setEmail={setEmail} password={password} setPassword={setPassword} />
             ) : (
               <div className="user-info-bar">
                 <span>Ви увійшли як: <strong>{user.email}</strong></span>
@@ -164,7 +135,12 @@ function App() {
           <Routes>
             <Route path="/" element={
               <div className="competitions">
-                {competitions.length > 0 && <Timer deadline={competitions[0].fullDate || "March 30, 2026"} name={competitions[0].name} />}
+                {upcomingCompetition ? (
+                  <Timer deadline={upcomingCompetition.fullDate} name={upcomingCompetition.name} />
+                ) : (
+                  competitions.length > 0 && <div className="timer-placeholder">Усі змагання вже розпочалися!</div>
+                )}
+
                 <div className="filters">
                   <button onClick={() => setActiveFilters([])} className={activeFilters.length === 0 ? 'active' : ''}>Всі</button>
                   {['AI', 'Web', 'Cyber'].map(cat => (
@@ -173,15 +149,10 @@ function App() {
                     </button>
                   ))}
                 </div>
+
                 <div className="grid-container">
                   {filteredData.map(h => (
-                    <HackathonCard 
-                      key={h.id} 
-                      title={h.name} 
-                      category={h.category || "General"} 
-                      rating={h.rating}
-                      {...h} 
-                    />
+                    <HackathonCard key={h.id} title={h.name} category={h.category || "General"} {...h} />
                   ))}
                 </div>
               </div>
@@ -202,10 +173,9 @@ function App() {
                   <div className="lock-icon">🔒</div>
                   <h2>Особистий простір розробника</h2>
                   <p>Цей розділ доступний лише авторизованим учасникам.</p>
-                  <p className="sub-text">Будь ласка, увійдіть у свій акаунт, щоб переглянути власні проєкти та статистику.</p>
                </div>
               )
-          } />
+            } />
           </Routes>
         </main>
 
