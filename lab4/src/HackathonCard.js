@@ -13,9 +13,9 @@ const HackathonCard = ({ title, category, theme, deadline, rating }) => {
       <div className="card-content">
         
         <div className="card-header">
-          <h3>{title}</h3>
-          {rating && (
-            <span className="card-rating-inline">
+            <h3>{title}</h3>
+            {rating && (
+              <span className="card-rating-inline">
               ⭐ {rating}
             </span>
           )}
