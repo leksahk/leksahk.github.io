@@ -31,8 +31,7 @@ app.post('/api/projects', async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-const buildPath = path.join(__dirname, '../client/build');
-console.log("Сервер шукає файли тут:", buildPath);
+const buildPath = path.join(__dirname, 'build');
 
 app.use(express.static(buildPath));
 
