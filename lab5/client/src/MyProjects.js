@@ -10,7 +10,7 @@ const MyProjects = () => {
   const [teamName, setTeamName] = useState(''); 
 
   const fetchProjects = () => {
-    fetch('http://localhost:5000/api/projects')
+    fetch('/api/projects')
       .then(res => res.json())
       .then(data => {
         setProjects(data);
@@ -28,7 +28,7 @@ const MyProjects = () => {
     const newProject = { title, description, teamName };
 
     try {
-      const response = await fetch('http://localhost:5000/api/projects', {
+      const response = await fetch('/api/projects', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newProject)
