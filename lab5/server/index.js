@@ -7,6 +7,7 @@ const app = express();
 
 app.use(cors()); 
 app.use(express.json()); 
+
 const serviceAccount = require("./serviceAccountKey.json");
 
 admin.initializeApp({
@@ -32,7 +33,7 @@ app.get('/api/projects', async (req, res) => {
     res.status(200).json(projects);
   } catch (error) {
     console.error("Помилка GET:", error);
-    res.status(500).send("Помилка при отриманні даних: " + error.message);
+    res.status(500).json({ error: "Помилка при отриманні даних" });
   }
 });
 
@@ -51,21 +52,19 @@ app.post('/api/projects', async (req, res) => {
     res.status(201).json({ id: docRef.id, ...newProject });
   } catch (error) {
     console.error("Помилка POST:", error);
-    res.status(500).send("Помилка при збереженні: " + error.message);
+    res.status(500).json({ error: "Помилка при збереженні" });
   }
 });
 
 app.use(express.static(path.join(__dirname, '../client/build')));
 
-app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/build/index.html'));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
 });
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`
-  🚀 Node.js сервер запущено!
-  📡 API доступне за адресою: http://localhost:${PORT}/api/projects
-  📂 Статичні файли: папка client/build
+  Сервер успішно запущено на порту ${PORT}
   `);
 });
