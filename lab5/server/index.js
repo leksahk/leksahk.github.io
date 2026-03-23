@@ -5,12 +5,8 @@ const path = require('path');
 
 const app = express();
 
-// --- НАЛАШТУВАННЯ (Middleware) ---
-app.use(cors()); // Дозволяємо запити з твого React-додатка
-app.use(express.json()); // Дозволяємо серверу розуміти JSON-дані в POST-запитах
-
-// --- 1. ПІДКЛЮЧЕННЯ FIREBASE (Пункт 2 методички) ---
-// Файл serviceAccountKey.json має лежати в папці server поруч із цим файлом!
+app.use(cors()); 
+app.use(express.json()); 
 const serviceAccount = require("./serviceAccountKey.json");
 
 admin.initializeApp({
@@ -19,12 +15,9 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
-// --- 2. GET: ОТРИМАННЯ ЗАЯВОК (Пункт 3 методички) ---
-// Отримуємо проєкти, відфільтровані/відсортовані за датою створення
 app.get('/api/projects', async (req, res) => {
   try {
     const projectsRef = db.collection('user_projects');
-    // Сортуємо за полем 'createdAt' у порядку спадання (спочатку нові)
     const snapshot = await projectsRef.orderBy('createdAt', 'desc').get();
     
     if (snapshot.empty) {
@@ -43,8 +36,6 @@ app.get('/api/projects', async (req, res) => {
   }
 });
 
-// --- 3. POST: ЗБЕРЕЖЕННЯ ЗАЯВКИ (Пункт 4 методички) ---
-// Приймає дані від React і зберігає в Firestore
 app.post('/api/projects', async (req, res) => {
   try {
     const { title, description, teamName } = req.body;
@@ -53,7 +44,7 @@ app.post('/api/projects', async (req, res) => {
       title,
       description,
       teamName,
-      createdAt: admin.firestore.FieldValue.serverTimestamp() // Автоматична дата сервера
+      createdAt: admin.firestore.FieldValue.serverTimestamp() 
     };
 
     const docRef = await db.collection('user_projects').add(newProject);
@@ -64,17 +55,12 @@ app.post('/api/projects', async (req, res) => {
   }
 });
 
-// --- 4. ХОСТИНГ СТАТИЧНИХ ФАЙЛІВ (Пункт 1 методички) ---
-// Коли зробиш 'npm run build' у папці client, сервер буде роздавати готовий сайт
 app.use(express.static(path.join(__dirname, '../client/build')));
 
-// Це дозволяє React Router працювати правильно (віддає index.html на будь-який шлях)
-// Ми використовуємо регулярний вираз /.*/ замість тексту '*'
 app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
 
-// --- ЗАПУСК СЕРВЕРА ---
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { HashRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, NavLink, Navigate } from 'react-router-dom';
 
 import { initializeApp } from "firebase/app";
 import { 
@@ -16,6 +16,7 @@ import HackathonCard from './HackathonCard';
 import ParticipantList from './ParticipantList';
 import Results from './Results';
 import './App.css';
+import MyProjects from './MyProjects'; 
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -54,6 +55,7 @@ function App() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [competitions, setCompetitions] = useState([]); 
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -161,19 +163,13 @@ function App() {
             <Route path="/results" element={<Results />} />
             <Route path="/my-projects" element={
               user ? (
-                <div className="page-container">
-                  <h2>🚀 Твої персональні розробки</h2>
-                  <div className="participant-card" style={{marginTop: '20px'}}>
-                    <span className="nickname">Мій Хакатон Проєкт</span>
-                    <span className="status">Статус: В розробці</span>
-                  </div>
-                </div>
+                <MyProjects />
               ) : (
                 <div className="page-container auth-placeholder">
                   <div className="lock-icon">🔒</div>
                   <h2>Особистий простір розробника</h2>
                   <p>Цей розділ доступний лише авторизованим учасникам.</p>
-               </div>
+                </div>
               )
             } />
           </Routes>
