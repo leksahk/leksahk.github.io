@@ -31,8 +31,7 @@ app.post('/api/projects', async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-const buildPath = path.join(__dirname, 'build');
-
+const buildPath = path.join(__dirname, 'build'); 
 app.use(express.static(buildPath));
 
 app.get('*', (req, res) => {
@@ -40,4 +39,4 @@ app.get('*', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Сервер на порту ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Сервер на порту ${PORT}`));
